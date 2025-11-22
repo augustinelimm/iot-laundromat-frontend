@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { WasherCard } from '../components/WasherCard';
 
-// Mock data structure - replace with your actual API response
+// Mock data structure - replace with actual API response
 const MOCK_WASHERS = [
   {
     id: 1,
@@ -47,17 +47,32 @@ const Home = () => {
     try {
       setError(null);
       
-      // TODO: Replace with your actual AWS API endpoint
-      // const apiResponse = await fetch('https://your-api-endpoint.com/washers');
-      // if (!apiResponse.ok) {
-      //   throw new Error(`Failed to fetch: ${apiResponse.status}`);
+      // ============================================================
+      // AWS API INTEGRATION - Uncomment and configure when ready
+      // ============================================================
+      // const response = await fetch(config.apiEndpoint + '/washers', {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     // Uncomment if your API Gateway requires an API key
+      //     // 'x-api-key': config.apiKey,
+      //   },
+      //   signal: AbortSignal.timeout(config.requestTimeout),
+      // });
+      // 
+      // if (!response.ok) {
+      //   throw new Error(`API request failed: ${response.status} ${response.statusText}`);
       // }
-      // const washerData = await apiResponse.json();
+      // 
+      // const washerData = await response.json();
       // setWashers(washerData);
+      // ============================================================
       
-      // For now, simulate API call with mock data and network delay
+      // MOCK DATA - Remove this section when using real API
       await new Promise(resolve => setTimeout(resolve, 500));
       setWashers(MOCK_WASHERS);
+      // END MOCK DATA
+      
       setLastUpdated(new Date());
     } catch (error) {
       console.error('Failed to fetch washer status:', error);
@@ -85,33 +100,27 @@ const Home = () => {
 
   if (loading && washers.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading washer status...</p>
+      <div>
+        <div>
+          <div></div>
+          <p>Loading washer status...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <main id="main" className="min-h-screen bg-gray-50 flex items-center justify-center p-8">
-      <div className="max-w-2xl w-full">
-        <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-          <div className="pt-6 pb-4 px-6 text-center">
-
-            <p className="text-gray-700 text-base">Real-time monitoring of your washing machines</p>
+    <main id="main" className="min-h-screen bg-gray-50 flex items-center justify-center py-8">
+      <div className="max-w-md w-full mx-auto">
+        <div className="bg-white rounded-lg shadow-sm">
+          <div className="py-6 px-4 text-center border-b">
+            <p className="text-gray-700">Real-time monitoring of your washing machines</p>
           </div>
 
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 text-center">
               <p>{error}</p>
-              <button 
-                onClick={handleRefresh}
-                className="mt-2 text-sm underline hover:no-underline"
-              >
-                Try again
-              </button>
+              <button onClick={handleRefresh} className="mt-2 underline">Try again</button>
             </div>
           )}
 
@@ -125,15 +134,11 @@ const Home = () => {
           </div>
 
           {/* Last updated timestamp and refresh button */}
-          <div className="text-center py-6 px-6 bg-white">
+          <div className="text-center py-4 px-4 border-t">
             <p className="text-sm text-gray-600 mb-2">
               Last updated: {lastUpdated.toLocaleTimeString()}
             </p>
-            <button
-              onClick={handleRefresh}
-              disabled={loading}
-              className="px-6 py-2 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
+            <button onClick={handleRefresh} disabled={loading} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50">
               {loading ? 'Refreshing...' : 'Refresh now'}
             </button>
           </div>

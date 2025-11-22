@@ -37,27 +37,27 @@ export const WasherCard = ({ washer }) => {
   );
 
   return (
-    <div className="bg-yellow-200 py-10 px-6 flex flex-col items-end border border-red-500 mt-4">
+    <div className="flex flex-col items-center py-8">
       {/* Washer Icon */}
-      <div className="mb-3">
+      <div className="mb-4">
         <WasherIcon />
       </div>
 
       {/* Washer Name Badge */}
-      <div className={`${backgroundColor} text-white px-12 py-2.5 rounded-md mb-8 text-lg font-medium`}>
+      <div className={`${backgroundColor} text-white px-8 py-2 rounded-lg mb-4 text-base font-medium`}>
         {name}
       </div>
 
       {/* Status Information */}
       <div className="text-center mb-4">
-        <span className="text-gray-800 text-base">{capacity} washer: </span>
-        <span className="font-bold text-gray-900 text-base">{status}</span>
+        <span className="text-gray-700">{capacity} washer:</span>
+        <span className="font-bold ml-1">{status}</span>
       </div>
 
       {/* Time and Progress Bar for In-Use Washers */}
       {!isAvailable && (
-        <div className="w-full max-w-md px-6">
-          <p className="text-gray-600 text-base text-center mb-3">
+        <div className="w-full max-w-sm px-4">
+          <p className="text-gray-600 text-sm text-center mb-2">
             Estimated time left: {timeLeft}
           </p>
           <ProgressBar value={progress} />
