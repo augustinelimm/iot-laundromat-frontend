@@ -110,9 +110,10 @@ const Home = () => {
                       status = 'AVAILABLE';
                     }
                     
+                    const machineNum = parseInt(reading.data.MachineID.replace('WM-', ''));
                     const washer = {
                       id: reading.machine_id,
-                      name: reading.data.MachineID,
+                      name: `Washer ${machineNum}`,
                       capacity: '7kg',
                       status: status,
                       timeLeft: state === 'RUNNING' ? 'Unknown' : null,

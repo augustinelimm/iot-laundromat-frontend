@@ -43,7 +43,7 @@ const Map = () => {
           </g>
         </svg>
         <div className={`${bgColor} text-white px-2 py-1 rounded text-xs font-medium mt-1`}>
-          {machineId}
+          Washer {machineId.replace('WM-', '')}
         </div>
       </div>
     );
