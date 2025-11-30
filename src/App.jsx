@@ -6,22 +6,23 @@ import { Header } from "./components/Header";
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
+  const [language, setLanguage] = useState('EN');
 
   // Render the appropriate page component based on current navigation state
   const renderCurrentPage = () => {
     switch(currentPage) {
       case 'about':
-        return <About />;
+        return <About language={language} />;
       case 'map':
-        return <Map />;
+        return <Map language={language} />;
       default:
-        return <Home />;
+        return <Home language={language} />;
     }
   };
 
   return (
     <div className="min-h-screen">
-      <Header currentPage={currentPage} onNavigate={setCurrentPage} />
+      <Header currentPage={currentPage} onNavigate={setCurrentPage} language={language} onLanguageChange={setLanguage} />
       {renderCurrentPage()}
     </div>
   );

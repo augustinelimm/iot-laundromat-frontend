@@ -2,7 +2,7 @@ import { WasherCard } from '../components/WasherCard';
 import { useReadings } from '../hooks/useReadings';
 import config from '../config/config';
 
-const Home = () => {
+const Home = ({ language = 'EN' }) => {
   const { data: readingsData, loading, error, refetch } = useReadings(config.pollingInterval);
 
   // ===== MOCK DATA - Comment out to use real API =====
@@ -124,6 +124,7 @@ const Home = () => {
                       <WasherCard
                         key={reading.id}
                         washer={washer}
+                        language={language}
                       />
                     );
                   })}

@@ -90,14 +90,6 @@ const Map = () => {
               <div className="w-4 h-4 bg-[#d4a017] rounded"></div>
               <span className="text-sm text-gray-700">Occupied</span>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-gray-400 rounded"></div>
-              <span className="text-sm text-gray-700">Counter</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-blue-500 rounded"></div>
-              <span className="text-sm text-gray-700">Sink</span>
-            </div>
           </div>
 
           {/* Layout Map */}
@@ -106,35 +98,35 @@ const Map = () => {
             <div style={{ position: 'absolute', left: '0', top: '0', width: '800px', height: '650px', border: '4px solid black' }}></div>
             
             {/* Vertical wall after column 1 */}
-            <div style={{ position: 'absolute', left: '198px', top: '0', width: '20px', height: '490px', background: 'white', border: '2px solid black' }}></div>
+            <div style={{ position: 'absolute', left: '198px', top: '0', width: '20px', height: '490px', background: '#9CA3AF' }}></div>
 
             {/* Vertical wall before right section (shorter) */}
-            <div style={{ position: 'absolute', left: '518px', top: '0', width: '20px', height: '380px', background: 'white', border: '2px solid black' }}></div>
+            <div style={{ position: 'absolute', left: '518px', top: '0', width: '20px', height: '380px', background: '#9CA3AF' }}></div>
             
             {/* Horizontal wall forming T with vertical wall */}
-            <div style={{ position: 'absolute', left: '428px', top: '360px', width: '200px', height: '20px', background: 'white', border: '2px solid black' }}></div>
+            <div style={{ position: 'absolute', left: '428px', top: '360px', width: '200px', height: '20px', background: '#9CA3AF' }}></div>
 
             {/* Horizontal wall bottom left */}
-            <div style={{ position: 'absolute', left: '198px', bottom: '160px', width: '140px', height: '20px', background: 'white', border: '2px solid black' }}></div>
+            <div style={{ position: 'absolute', left: '198px', bottom: '160px', width: '140px', height: '20px', background: '#9CA3AF' }}></div>
 
             {/* Horizontal wall middle (below counter) */}
-            <div style={{ position: 'absolute', left: '710px', top: '360px', width: '90px', height: '20px', background: 'white', border: '2px solid black' }}></div>
+            <div style={{ position: 'absolute', left: '710px', top: '360px', width: '90px', height: '20px', background: '#9CA3AF' }}></div>
 
             {/* Door bottom */}
             <div style={{ position: 'absolute', left: '320px', bottom: '0', width: '170px', height: '20px', background: '#9CA3AF', border: '2px solid black' }}></div>
             <div style={{ position: 'absolute', left: '370px', bottom: '25px', fontSize: '12px', fontWeight: 'bold', color: 'black' }}>Door</div>
 
             {/* Left Column (Machines 1-4) */}
-            <div style={{ position: 'absolute', left: '119px', top: '30px' }}>
+            <div style={{ position: 'absolute', left: '95px', top: '30px' }}>
               <MiniWasher machineId="WM-01" />
             </div>
-            <div style={{ position: 'absolute', left: '119px', top: '140px' }}>
+            <div style={{ position: 'absolute', left: '95px', top: '140px' }}>
               <MiniWasher machineId="WM-02" />
             </div>
-            <div style={{ position: 'absolute', left: '119px', top: '250px' }}>
+            <div style={{ position: 'absolute', left: '95px', top: '250px' }}>
               <MiniWasher machineId="WM-03" />
             </div>
-            <div style={{ position: 'absolute', left: '119px', top: '360px' }}>
+            <div style={{ position: 'absolute', left: '95px', top: '360px' }}>
               <MiniWasher machineId="WM-04" />
             </div>
 
@@ -153,7 +145,7 @@ const Map = () => {
             </div>
 
             {/* Counter (gray background behind sinks) */}
-            <div style={{ position: 'absolute', left: '428px', top: '0', width: '96px', height: '360px', background: '#9CA3AF', border: '2px solid black' }}></div>
+            <div style={{ position: 'absolute', left: '428px', top: '0', width: '90px', height: '360px', background: '#4B5563' }}></div>
 
             {/* Sinks */}
             <div style={{ position: 'absolute', left: '448px', top: '50px', width: '60px', height: '70px', background: '#60A5FA', borderRadius: '4px', border: '2px solid #2563EB' }}></div>
@@ -168,7 +160,7 @@ const Map = () => {
             </div>
 
             {/* Far right machines (11) and dryers */}
-            <div style={{ position: 'absolute', left: '721px', top: '30px' }}>
+            <div style={{ position: 'absolute', left: '715px', top: '30px' }}>
               <MiniWasher machineId="WM-11" />
             </div>
             <div style={{ position: 'absolute', left: '721px', top: '250px' }}>

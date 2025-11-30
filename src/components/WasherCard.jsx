@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import ProgressBar from "./ProgressBar";
 
-export const WasherCard = ({ washer }) => {
+export const WasherCard = ({ washer, language = 'EN' }) => {
   const {
     name,
     capacity,
@@ -15,6 +15,18 @@ export const WasherCard = ({ washer }) => {
   const isInUse = status === "IN USE";
   const washerColor = isAvailable ? "#9bc14b" : isOccupied ? "#d4a017" : "#4a7c8c";
   const backgroundColor = isAvailable ? "bg-[#9bc14b]" : isOccupied ? "bg-[#d4a017]" : "bg-[#4a7c8c]";
+
+  // Translate status text based on language
+  const getStatusText = () => {
+    if (language === 'ZH') {
+      if (isInUse) return '使用中';
+      if (isOccupied) return '完成';
+      return '可用';
+    }
+    return status;
+  };
+
+  const displayStatus = getStatusText();
 
   // Use refs for animation to avoid re-renders
   const clothesPosRef = useRef({ x: 50, y: 80 });
@@ -164,7 +176,7 @@ export const WasherCard = ({ washer }) => {
 
       {/* Status Information */}
       <div className="text-center mb-4">
-        <span className="font-bold">{status}</span>
+        <span className="font-bold">{displayStatus}</span>
       </div>
     </div>
   );

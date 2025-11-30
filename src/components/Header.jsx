@@ -16,9 +16,8 @@ const MenuIcon = ({ open }) => (
   </div>
 );
 
-export const Header = ({ currentPage, onNavigate }) => {
+export const Header = ({ currentPage, onNavigate, language, onLanguageChange }) => {
   const [langMenuOpen, setLangMenuOpen] = useState(false);
-  const [currentLang, setCurrentLang] = useState('EN');
   const langMenuRef = useRef(null);
   const langButtonRef = useRef(null);
 
@@ -29,7 +28,7 @@ export const Header = ({ currentPage, onNavigate }) => {
   };
 
   const handleLanguageChange = (lang) => {
-    setCurrentLang(lang);
+    onLanguageChange(lang);
     setLangMenuOpen(false);
     // Return focus to toggle for accessibility
     langButtonRef.current?.focus();
@@ -93,7 +92,7 @@ export const Header = ({ currentPage, onNavigate }) => {
               className="flex items-center gap-2 text-gray-700 hover:text-gray-900 focus:outline-none"
             >
               <GlobeIcon />
-              <span className="font-medium">{currentLang}</span>
+              <span className="font-medium">{language}</span>
             </button>
             {langMenuOpen && (
               <div 
@@ -105,14 +104,14 @@ export const Header = ({ currentPage, onNavigate }) => {
                 <button
                   role="menuitem"
                   onClick={() => handleLanguageChange('EN')}
-                  className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors ${currentLang === 'EN' ? 'bg-gray-50 font-semibold' : ''}`}
+                  className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors ${language === 'EN' ? 'bg-gray-50 font-semibold' : ''}`}
                 >
                   English
                 </button>
                 <button
                   role="menuitem"
                   onClick={() => handleLanguageChange('ZH')}
-                  className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors ${currentLang === 'ZH' ? 'bg-gray-50 font-semibold' : ''}`}
+                  className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors ${language === 'ZH' ? 'bg-gray-50 font-semibold' : ''}`}
                 >
                   中文
                 </button>
