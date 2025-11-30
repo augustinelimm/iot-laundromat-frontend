@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Home from "./pages/Home";
 import About from "./pages/About";
+import Map from "./pages/Map";
 import { Header } from "./components/Header";
 
 function App() {
@@ -11,6 +12,8 @@ function App() {
     switch(currentPage) {
       case 'about':
         return <About />;
+      case 'map':
+        return <Map />;
       default:
         return <Home />;
     }

@@ -55,10 +55,10 @@ const Home = () => {
 
   if (loading && !displayData) {
     return (
-      <main className="min-h-screen bg-gray-50 flex items-center justify-center py-8">
-        <div className="max-w-md w-full mx-auto">
-          <div className="bg-white rounded-lg shadow-sm p-8 text-center">
-            <p className="text-gray-700">Loading washer status...</p>
+      <main className="min-h-screen bg-gray-50 flex items-center justify-center py-12">
+        <div className="max-w-7xl w-full mx-auto px-8">
+          <div className="bg-white rounded-lg shadow-sm p-12 text-center">
+            <p className="text-gray-700 text-lg">Loading washer status...</p>
           </div>
         </div>
       </main>
@@ -66,50 +66,77 @@ const Home = () => {
   }
 
   return (
-    <main id="main" className="min-h-screen bg-gray-50 flex items-center justify-center py-8">
-      <div className="max-w-md w-full mx-auto">
+    <main id="main" className="min-h-screen bg-gray-50 py-12">
+      <div className="max-w-7xl w-full mx-auto px-8">
         <div className="bg-white rounded-lg shadow-sm">
-          <div className="py-6 px-4 text-center border-b">
-            <p className="text-gray-700">Real-time monitoring of your washing machines</p>
+          <div className="py-8 px-8 text-center border-b">
+            <h1 className="text-3xl font-semibold text-gray-900 mb-2">Washing Machine Monitor</h1>
+            <p className="text-gray-600 text-lg">Real-time monitoring of your washing machines</p>
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 text-center">
-              <p>{error}</p>
-              <button onClick={handleRefresh} className="mt-2 underline">Try again</button>
+            <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 mx-8 mt-6 rounded-lg">
+              <p className="text-lg">{error}</p>
+              <button onClick={handleRefresh} className="mt-2 underline text-base">Try again</button>
             </div>
           )}
 
-          <div>
+          <div className="p-8">
             {displayData?.data && displayData.data.length > 0 ? (
-              displayData.data.map((reading) => {
-                // Map API data to WasherCard format
-                const washer = {
-                  id: reading.id,
-                  name: reading.data.MachineID,
-                  capacity: '7kg', // You can adjust this or get from API if available
-                  status: reading.data.state === 'RUNNING' ? 'IN USE' : 'AVAILABLE',
-                  timeLeft: reading.data.state === 'RUNNING' ? 'Unknown' : null,
-                  progress: reading.data.state === 'RUNNING' ? 50 : 0 // You can calculate this based on cycle data
-                };
-                
-                return (
-                  <WasherCard
-                    key={reading.id}
-                    washer={washer}
-                  />
-                );
-              })
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                {displayData.data
+                  .filter(reading => {
+                    const machineNum = parseInt(reading.data.MachineID.replace('WM-', ''));
+                    return machineNum >= 1 && machineNum <= 4;
+                  })
+                  .filter((reading, index, self) => 
+                    index === self.findIndex((r) => r.data.MachineID === reading.data.MachineID)
+                  )
+                  .sort((a, b) => {
+                    const numA = parseInt(a.data.MachineID.replace('WM-', ''));
+                    const numB = parseInt(b.data.MachineID.replace('WM-', ''));
+                    return numA - numB;
+                  })
+                  .slice(0, 4)
+                  .map((reading) => {
+                    // Map API data to WasherCard format
+                    const state = reading.data.state;
+                    let status = 'AVAILABLE';
+                    if (state === 'RUNNING') {
+                      status = 'IN USE';
+                    } else if (state === 'OCCUPIED') {
+                      status = 'OCCUPIED';
+                    } else if (state === 'IDLE') {
+                      status = 'AVAILABLE';
+                    }
+                    
+                    const washer = {
+                      id: reading.machine_id,
+                      name: reading.data.MachineID,
+                      capacity: '7kg',
+                      status: status,
+                      timeLeft: state === 'RUNNING' ? 'Unknown' : null,
+                      progress: state === 'RUNNING' ? 50 : 0
+                    };
+                    
+                    return (
+                      <WasherCard
+                        key={reading.id}
+                        washer={washer}
+                      />
+                    );
+                  })}
+              </div>
             ) : (
-              <div className="p-6">
-                <p className="text-gray-500 text-center">No machine data available</p>
+              <div className="py-12">
+                <p className="text-gray-500 text-center text-lg">No machine data available</p>
               </div>
             )}
           </div>
 
           {/* Refresh button */}
-          <div className="text-center py-4 px-4 border-t">
-            <button onClick={handleRefresh} disabled={loading} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50">
+          <div className="text-center py-6 px-8 border-t">
+            <button onClick={handleRefresh} disabled={loading} className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 text-base font-medium transition-colors">
               {loading ? 'Refreshing...' : 'Refresh now'}
             </button>
           </div>

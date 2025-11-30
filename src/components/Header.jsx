@@ -17,22 +17,15 @@ const MenuIcon = ({ open }) => (
 );
 
 export const Header = ({ currentPage, onNavigate }) => {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState('EN');
-  const menuRef = useRef(null);
-  const toggleButtonRef = useRef(null);
   const langMenuRef = useRef(null);
   const langButtonRef = useRef(null);
 
-  const toggleMenu = () => setMenuOpen(o => !o);
   const toggleLangMenu = () => setLangMenuOpen(o => !o);
 
   const handleNavigation = (page) => {
     onNavigate(page);
-    setMenuOpen(false);
-    // Return focus to toggle for accessibility
-    toggleButtonRef.current?.focus();
   };
 
   const handleLanguageChange = (lang) => {
@@ -41,29 +34,6 @@ export const Header = ({ currentPage, onNavigate }) => {
     // Return focus to toggle for accessibility
     langButtonRef.current?.focus();
   };
-
-  // Close menu when user clicks outside or presses Escape key
-  useEffect(() => {
-    if (!menuOpen) return;
-    
-    const handleEscapeKey = (event) => { 
-      if (event.key === 'Escape') setMenuOpen(false); 
-    };
-    
-    const handleOutsideClick = (event) => { 
-      if (menuRef.current && !menuRef.current.contains(event.target) && !toggleButtonRef.current.contains(event.target)) {
-        setMenuOpen(false); 
-      }
-    };
-    
-    window.addEventListener('keydown', handleEscapeKey);
-    window.addEventListener('mousedown', handleOutsideClick);
-    
-    return () => { 
-      window.removeEventListener('keydown', handleEscapeKey); 
-      window.removeEventListener('mousedown', handleOutsideClick); 
-    };
-  }, [menuOpen]);
 
   // Close language menu when user clicks outside or presses Escape key
   useEffect(() => {
@@ -88,18 +58,30 @@ export const Header = ({ currentPage, onNavigate }) => {
     };
   }, [langMenuOpen]);
 
-  const handleMenuToggleKeyPress = (event) => {
-    // Allow keyboard users to toggle menu with Enter or Space
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      toggleMenu();
-    }
-  };
-
   return (
     <>
-      <header className="flex w-full h-[60px] items-center justify-end px-6 bg-white border-b border-gray-200 sticky top-0 z-50">
-        <nav aria-label="Main" className="flex items-center gap-6">
+      <header className="flex w-full h-[60px] items-center justify-center px-6 bg-white border-b border-gray-200 sticky top-0 z-50">
+        <nav aria-label="Main" className="flex items-center gap-8">
+          <button
+            onClick={() => handleNavigation('home')}
+            className={`text-sm font-medium transition-colors ${currentPage === 'home' ? 'text-blue-600' : 'text-gray-700 hover:text-gray-900'}`}
+          >
+            Home
+          </button>
+          <button
+            onClick={() => handleNavigation('map')}
+            className={`text-sm font-medium transition-colors ${currentPage === 'map' ? 'text-blue-600' : 'text-gray-700 hover:text-gray-900'}`}
+          >
+            Map
+          </button>
+          <button
+            onClick={() => handleNavigation('about')}
+            className={`text-sm font-medium transition-colors ${currentPage === 'about' ? 'text-blue-600' : 'text-gray-700 hover:text-gray-900'}`}
+          >
+            About
+          </button>
+        </nav>
+        <div className="absolute right-6 flex items-center gap-6">
           <div className="relative">
             <button
               ref={langButtonRef}
@@ -137,40 +119,7 @@ export const Header = ({ currentPage, onNavigate }) => {
               </div>
             )}
           </div>
-          <div className="relative">
-            <button
-              ref={toggleButtonRef}
-              type="button"
-              aria-label="Menu"
-              aria-haspopup="true"
-              aria-expanded={menuOpen}
-              aria-controls="site-menu"
-              onClick={toggleMenu}
-              onKeyDown={handleMenuToggleKeyPress}
-              className="flex items-center justify-center focus:outline-none p-2 -mr-2"
-            >
-              <MenuIcon open={menuOpen} />
-            </button>
-            {menuOpen && (
-              <div id="site-menu" ref={menuRef} role="menu" aria-label="Site navigation" className="absolute right-0 top-full mt-2 bg-white rounded-lg shadow-lg border border-gray-200 z-50 w-48 py-2">
-                <button
-                  role="menuitem"
-                  onClick={() => handleNavigation('home')}
-                  className={`w-full text-left px-4 py-3 text-sm hover:bg-gray-100 transition-colors ${currentPage === 'home' ? 'bg-gray-50 font-semibold' : ''}`}
-                >
-                  Home
-                </button>
-                <button
-                  role="menuitem"
-                  onClick={() => handleNavigation('about')}
-                  className={`w-full text-left px-4 py-3 text-sm hover:bg-gray-100 transition-colors ${currentPage === 'about' ? 'bg-gray-50 font-semibold' : ''}`}
-                >
-                  About
-                </button>
-              </div>
-            )}
-          </div>
-        </nav>
+        </div>
       </header>
     </>
   );

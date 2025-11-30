@@ -10,8 +10,9 @@ export const WasherCard = ({ washer }) => {
   } = washer;
 
   const isAvailable = status === "AVAILABLE";
-  const washerColor = isAvailable ? "#9bc14b" : "#4a7c8c";
-  const backgroundColor = isAvailable ? "bg-[#9bc14b]" : "bg-[#4a7c8c]";
+  const isOccupied = status === "OCCUPIED";
+  const washerColor = isAvailable ? "#9bc14b" : isOccupied ? "#d4a017" : "#4a7c8c";
+  const backgroundColor = isAvailable ? "bg-[#9bc14b]" : isOccupied ? "bg-[#d4a017]" : "bg-[#4a7c8c]";
 
   // SVG Washer Icon - tight viewBox crops exactly around the washer (x:18-122, y:18-162)
   const WasherIcon = () => (
@@ -28,11 +29,13 @@ export const WasherCard = ({ washer }) => {
       {/* Door outer circle - white background */}
       <circle cx="70" cy="100" r="42" fill="#e8f0f5" stroke={washerColor} strokeWidth="3"/>
       
-      {/* Door inner circle */}
-      <circle cx="70" cy="100" r="32" fill="none" stroke={washerColor} strokeWidth="2.5" opacity="0.6"/>
-      
-      {/* Water wave effect */}
-      <path d="M 48 100 Q 54 96 60 100 T 72 100 T 84 100 Q 90 96 92 100" stroke={washerColor} strokeWidth="2.5" fill="none" opacity="0.4"/>
+      {/* Door inner circle with spinning animation when in use */}
+      <g className={!isAvailable ? 'animate-spin' : ''} style={{ transformOrigin: '70px 100px' }}>
+        <circle cx="70" cy="100" r="32" fill="none" stroke={washerColor} strokeWidth="2.5" opacity="0.6"/>
+        
+        {/* Water wave effect */}
+        <path d="M 48 100 Q 54 96 60 100 T 72 100 T 84 100 Q 90 96 92 100" stroke={washerColor} strokeWidth="2.5" fill="none" opacity="0.4"/>
+      </g>
     </svg>
   );
 
@@ -50,19 +53,8 @@ export const WasherCard = ({ washer }) => {
 
       {/* Status Information */}
       <div className="text-center mb-4">
-        <span className="text-gray-700">{capacity} washer:</span>
-        <span className="font-bold ml-1">{status}</span>
+        <span className="font-bold">{status}</span>
       </div>
-
-      {/* Time and Progress Bar for In-Use Washers */}
-      {!isAvailable && (
-        <div className="w-full max-w-sm px-4">
-          <p className="text-gray-600 text-sm text-center mb-2">
-            Estimated time left: {timeLeft}
-          </p>
-          <ProgressBar value={progress} />
-        </div>
-      )}
     </div>
   );
 };
