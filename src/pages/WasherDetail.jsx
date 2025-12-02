@@ -1,5 +1,6 @@
 import { useReadings } from '../hooks/useReadings';
 import config from '../config/config';
+import ProgressBar from '../components/ProgressBar';
 
 const WasherDetail = ({ machineId, onBack, language }) => {
   const { data: readingsData, loading, error } = useReadings(config.pollingInterval);
@@ -16,6 +17,44 @@ const WasherDetail = ({ machineId, onBack, language }) => {
   const isInUse = state === 'RUNNING';
 
   const phases = ['WASHING', 'RINSE', 'SPINNING'];
+  
+  // Calculate progress and time remaining based on current phase
+  const getProgressData = () => {
+    if (!isInUse || !currentPhase) {
+      return { progress: 0, timeRemaining: 0, totalTime: 45 };
+    }
+
+    // Define time for each phase in minutes
+    const phaseTimes = {
+      'WASHING': 20,  // 20 minutes
+      'RINSE': 15,    // 15 minutes
+      'SPINNING': 10  // 10 minutes
+    };
+
+    const totalTime = 45; // Total cycle time in minutes
+    const currentPhaseIndex = phases.indexOf(currentPhase);
+    
+    // Calculate elapsed time (sum of completed phases + random progress in current phase)
+    let elapsedTime = 0;
+    for (let i = 0; i < currentPhaseIndex; i++) {
+      elapsedTime += phaseTimes[phases[i]];
+    }
+    
+    // Add random progress within current phase (between 30% and 80% of phase time)
+    const currentPhaseProgress = phaseTimes[currentPhase] * (0.3 + Math.random() * 0.5);
+    elapsedTime += currentPhaseProgress;
+    
+    const timeRemaining = Math.max(0, totalTime - elapsedTime);
+    const progress = (elapsedTime / totalTime) * 100;
+
+    return { 
+      progress: Math.min(95, progress), // Cap at 95% until actually done
+      timeRemaining: Math.ceil(timeRemaining),
+      totalTime 
+    };
+  };
+
+  const { progress, timeRemaining, totalTime } = getProgressData();
   
   const getPhaseStatus = (phase) => {
     if (!currentPhase) return 'pending';
@@ -42,6 +81,12 @@ const WasherDetail = ({ machineId, onBack, language }) => {
     if (isInUse) return '#4a7c8c';
     if (isOccupied) return '#d4a017';
     return '#9bc14b';
+  };
+
+  const formatTime = (minutes) => {
+    if (minutes < 1) return '< 1 min';
+    if (minutes === 1) return '1 min';
+    return `${minutes} mins`;
   };
 
   if (loading) {
@@ -153,6 +198,28 @@ const WasherDetail = ({ machineId, onBack, language }) => {
               )}
             </svg>
           </div>
+
+          {/* Progress Bar - Show when machine is running */}
+          {isInUse && currentPhase && (
+            <div className="mb-8 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-6">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  {language === 'ZH' ? '进度' : 'Progress'}
+                </h3>
+                <div className="text-right">
+                  <p className="text-2xl font-bold text-blue-600">{timeRemaining}</p>
+                  <p className="text-sm text-gray-600">
+                    {language === 'ZH' ? '分钟剩余' : 'mins remaining'}
+                  </p>
+                </div>
+              </div>
+              <ProgressBar value={progress} color="#4a7c8c" />
+              <div className="flex justify-between mt-2 text-sm text-gray-600">
+                <span>{language === 'ZH' ? '已用时间' : 'Elapsed'}: {formatTime(Math.ceil((progress / 100) * totalTime))}</span>
+                <span>{language === 'ZH' ? '总时间' : 'Total'}: {formatTime(totalTime)}</span>
+              </div>
+            </div>
+          )}
 
           {/* Phase Timeline - Only show when machine is running */}
           {isInUse && currentPhase && (
