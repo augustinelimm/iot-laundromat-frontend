@@ -15,6 +15,10 @@ const WasherDetail = ({ machineId, onBack, language }) => {
   const state = machineData?.data?.state || 'IDLE';
   const currentPhase = machineData?.data?.ml_phase || null;
   const powerConsumption = machineData?.data?.current || 0;
+  const cycleNumber = machineData?.data?.cycle_number || 0;
+  const totalCyclesUsed = cycleNumber * 100; // Inflate the cycle number
+  const maintenanceThreshold = 30000; // Maintenance needed at 30,000 cycles
+  const maintenanceProgress = (totalCyclesUsed / maintenanceThreshold) * 100;
   const isAvailable = state === 'IDLE';
   const isOccupied = state === 'OCCUPIED';
   const isInUse = state === 'RUNNING';
@@ -329,12 +333,9 @@ const WasherDetail = ({ machineId, onBack, language }) => {
                 <div className="mt-4 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-lg font-semibold text-purple-900 dark:text-purple-300 mb-1">
+                      <h3 className="text-lg font-semibold text-purple-900 dark:text-purple-300">
                         {language === 'ZH' ? '当前功耗' : 'Current Power Consumption'}
                       </h3>
-                      <p className="text-sm text-purple-600 dark:text-purple-400">
-                        {language === 'ZH' ? '实时电力使用' : 'Real-time power usage'}
-                      </p>
                     </div>
                     <div className="text-right">
                       <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">
@@ -345,42 +346,94 @@ const WasherDetail = ({ machineId, onBack, language }) => {
                       </p>
                     </div>
                   </div>
-                  
-                  {/* Power meter visualization */}
-                  <div className="mt-4">
-                    <div className="flex items-center gap-3">
-                      <div className="flex-1">
-                        <div className="h-3 bg-purple-200 dark:bg-purple-800 rounded-full overflow-hidden">
-                          <div 
-                            className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full transition-all duration-500"
-                            style={{ width: `${Math.min((powerConsumption / 250) * 100, 100)}%` }}
-                          />
-                        </div>
-                      </div>
-                      <span className="text-xs text-purple-600 dark:text-purple-400 font-medium">
-                        {Math.round((powerConsumption / 250) * 100)}%
-                      </span>
-                    </div>
-                    <div className="flex justify-between mt-1 text-xs text-purple-600 dark:text-purple-400">
-                      <span>0W</span>
-                      <span>250W</span>
-                    </div>
-                  </div>
-
-                  {/* Energy efficiency indicator */}
-                  <div className="mt-4 pt-4 border-t border-purple-200 dark:border-purple-800">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-purple-700 dark:text-purple-300">
-                        {language === 'ZH' ? '能效评级' : 'Energy Efficiency'}
-                      </span>
-                      <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full font-medium">
-                        A+
-                      </span>
-                    </div>
-                  </div>
                 </div>
               )}
             </>
+          )}
+
+          {/* Maintenance Tracker - Only show in Business Mode */}
+          {isBusinessMode && (
+            <div className="mt-6 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 border border-orange-200 dark:border-orange-800 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-orange-900 dark:text-orange-300 mb-4">
+                {language === 'ZH' ? '维护追踪' : 'Maintenance Tracker'}
+              </h3>
+              
+              <div className="space-y-4">
+                {/* Cycle count */}
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-orange-700 dark:text-orange-400">
+                    {language === 'ZH' ? '总使用次数' : 'Total Cycles Used'}
+                  </span>
+                  <span className="text-lg font-bold text-orange-900 dark:text-orange-300">
+                    {totalCyclesUsed.toLocaleString()}
+                  </span>
+                </div>
+
+                {/* Progress bar */}
+                <div>
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="flex-1">
+                      <div className="h-4 bg-orange-200 dark:bg-orange-800 rounded-full overflow-hidden">
+                        <div 
+                          className={`h-full rounded-full transition-all duration-500 ${
+                            maintenanceProgress >= 90 
+                              ? 'bg-gradient-to-r from-red-500 to-red-600' 
+                              : maintenanceProgress >= 70 
+                                ? 'bg-gradient-to-r from-yellow-500 to-orange-500'
+                                : 'bg-gradient-to-r from-green-500 to-emerald-500'
+                          }`}
+                          style={{ width: `${Math.min(maintenanceProgress, 100)}%` }}
+                        />
+                      </div>
+                    </div>
+                    <span className="text-sm text-orange-600 dark:text-orange-400 font-medium min-w-[50px] text-right">
+                      {maintenanceProgress.toFixed(1)}%
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-xs text-orange-600 dark:text-orange-400">
+                    <span>0</span>
+                    <span>30,000 {language === 'ZH' ? '次' : 'cycles'}</span>
+                  </div>
+                </div>
+
+                {/* Status message */}
+                <div className="pt-3 border-t border-orange-200 dark:border-orange-800">
+                  {maintenanceProgress >= 90 ? (
+                    <div className="flex items-center gap-2 text-red-700 dark:text-red-400">
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd"/>
+                      </svg>
+                      <span className="text-sm font-medium">
+                        {language === 'ZH' ? '需要维护' : 'Maintenance Required'}
+                      </span>
+                    </div>
+                  ) : maintenanceProgress >= 70 ? (
+                    <div className="flex items-center gap-2 text-yellow-700 dark:text-yellow-400">
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"/>
+                      </svg>
+                      <span className="text-sm font-medium">
+                        {language === 'ZH' ? '即将需要维护' : 'Maintenance Due Soon'}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2 text-green-700 dark:text-green-400">
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+                      </svg>
+                      <span className="text-sm font-medium">
+                        {language === 'ZH' ? '状态良好' : 'Good Condition'}
+                      </span>
+                    </div>
+                  )}
+                  <p className="text-xs text-orange-600 dark:text-orange-400 mt-2">
+                    {language === 'ZH' 
+                      ? `距离维护还有 ${(maintenanceThreshold - totalCyclesUsed).toLocaleString()} 次`
+                      : `${(maintenanceThreshold - totalCyclesUsed).toLocaleString()} cycles until maintenance`}
+                  </p>
+                </div>
+              </div>
+            </div>
           )}
 
           {isOccupied && (

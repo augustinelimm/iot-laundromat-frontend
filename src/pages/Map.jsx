@@ -10,11 +10,13 @@ const Map = ({ onMachineClick }) => {
     // Filter and deduplicate - track WM-01 through WM-11
     const uniqueMachines = readingsData.data
       .filter(reading => {
+        // Check if reading and reading.data exist
+        if (!reading?.data?.MachineID) return false;
         const machineNum = parseInt(reading.data.MachineID.replace('WM-', ''));
         return machineNum >= 1 && machineNum <= 11;
       })
       .filter((reading, index, self) => 
-        index === self.findIndex((r) => r.data.MachineID === reading.data.MachineID)
+        index === self.findIndex((r) => r?.data?.MachineID === reading?.data?.MachineID)
       );
     
     uniqueMachines.forEach(reading => {

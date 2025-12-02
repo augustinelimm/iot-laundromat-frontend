@@ -98,11 +98,13 @@ const Home = ({ language = 'EN', onMachineClick }) => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 {displayData.data
                   .filter(reading => {
+                    // Check if reading and reading.data exist
+                    if (!reading?.data?.MachineID) return false;
                     const machineNum = parseInt(reading.data.MachineID.replace('WM-', ''));
                     return machineNum >= 1 && machineNum <= 11;
                   })
                   .filter((reading, index, self) => 
-                    index === self.findIndex((r) => r.data.MachineID === reading.data.MachineID)
+                    index === self.findIndex((r) => r?.data?.MachineID === reading?.data?.MachineID)
                   )
                   .sort((a, b) => {
                     const numA = parseInt(a.data.MachineID.replace('WM-', ''));
@@ -123,7 +125,7 @@ const Home = ({ language = 'EN', onMachineClick }) => {
                     
                     const machineNum = parseInt(reading.data.MachineID.replace('WM-', ''));
                     const washer = {
-                      id: reading.machine_id,
+                      id: reading.machine_id || reading.id,
                       name: `Washer ${machineNum}`,
                       capacity: '7kg',
                       status: status,
