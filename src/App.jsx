@@ -7,17 +7,19 @@ import { Header } from "./components/Header";
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
+  const [previousPage, setPreviousPage] = useState('home');
   const [selectedMachine, setSelectedMachine] = useState(null);
   const [language, setLanguage] = useState('EN');
 
   const handleMachineClick = (machineId) => {
+    setPreviousPage(currentPage);
     setSelectedMachine(machineId);
     setCurrentPage('washer-detail');
   };
 
   const handleBackFromDetail = () => {
     setSelectedMachine(null);
-    setCurrentPage('home');
+    setCurrentPage(previousPage);
   };
 
   // Render the appropriate page component based on current navigation state

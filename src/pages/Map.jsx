@@ -7,11 +7,11 @@ const Map = ({ onMachineClick }) => {
   // Create a map of machine statuses by MachineID
   const machineStatuses = {};
   if (readingsData?.data) {
-    // Filter and deduplicate - only track WM-01 through WM-04
+    // Filter and deduplicate - track WM-01 through WM-11
     const uniqueMachines = readingsData.data
       .filter(reading => {
         const machineNum = parseInt(reading.data.MachineID.replace('WM-', ''));
-        return machineNum >= 1 && machineNum <= 4;
+        return machineNum >= 1 && machineNum <= 11;
       })
       .filter((reading, index, self) => 
         index === self.findIndex((r) => r.data.MachineID === reading.data.MachineID)
@@ -151,8 +151,18 @@ const Map = ({ onMachineClick }) => {
             <div style={{ position: 'absolute', left: '428px', top: '5px', width: '90px', height: '355px', background: '#4B5563' }}></div>
 
             {/* Sinks */}
-            <div style={{ position: 'absolute', left: '448px', top: '50px', width: '60px', height: '70px', background: '#60A5FA', borderRadius: '4px', border: '2px solid #2563EB' }}></div>
-            <div style={{ position: 'absolute', left: '448px', top: '160px', width: '60px', height: '70px', background: '#60A5FA', borderRadius: '4px', border: '2px solid #2563EB' }}></div>
+            <div style={{ position: 'absolute', left: '448px', top: '50px' }}>
+              <div style={{ width: '60px', height: '70px', background: '#60A5FA', borderRadius: '4px', border: '2px solid #2563EB' }}></div>
+              <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium mt-1 text-center" style={{ width: '60px' }}>
+                Sink
+              </div>
+            </div>
+            <div style={{ position: 'absolute', left: '448px', top: '160px' }}>
+              <div style={{ width: '60px', height: '70px', background: '#60A5FA', borderRadius: '4px', border: '2px solid #2563EB' }}></div>
+              <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium mt-1 text-center" style={{ width: '60px' }}>
+                Sink
+              </div>
+            </div>
 
             {/* Right top machines (9, 10) */}
             <div style={{ position: 'absolute', left: '559px', top: '30px' }}>

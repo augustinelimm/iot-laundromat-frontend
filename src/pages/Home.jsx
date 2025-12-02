@@ -99,7 +99,7 @@ const Home = ({ language = 'EN', onMachineClick }) => {
                 {displayData.data
                   .filter(reading => {
                     const machineNum = parseInt(reading.data.MachineID.replace('WM-', ''));
-                    return machineNum >= 1 && machineNum <= 4;
+                    return machineNum >= 1 && machineNum <= 11;
                   })
                   .filter((reading, index, self) => 
                     index === self.findIndex((r) => r.data.MachineID === reading.data.MachineID)
@@ -109,7 +109,6 @@ const Home = ({ language = 'EN', onMachineClick }) => {
                     const numB = parseInt(b.data.MachineID.replace('WM-', ''));
                     return numA - numB;
                   })
-                  .slice(0, 4)
                   .map((reading) => {
                     // Map API data to WasherCard format
                     const state = reading.data.state;
