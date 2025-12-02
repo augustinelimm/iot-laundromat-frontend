@@ -4,6 +4,7 @@ import About from "./pages/About";
 import Map from "./pages/Map";
 import WasherDetail from "./pages/WasherDetail";
 import { Header } from "./components/Header";
+import { ThemeProvider } from "./context/ThemeContext";
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -37,12 +38,14 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen">
-      {currentPage !== 'washer-detail' && (
-        <Header currentPage={currentPage} onNavigate={setCurrentPage} language={language} onLanguageChange={setLanguage} />
-      )}
-      {renderCurrentPage()}
-    </div>
+    <ThemeProvider>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+        {currentPage !== 'washer-detail' && (
+          <Header currentPage={currentPage} onNavigate={setCurrentPage} language={language} onLanguageChange={setLanguage} />
+        )}
+        {renderCurrentPage()}
+      </div>
+    </ThemeProvider>
   );
 }
 

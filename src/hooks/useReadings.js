@@ -3,24 +3,26 @@ import { useState, useEffect } from 'react';
 // Mock data for machines 5-11
 const getMockData = () => {
   const mockMachines = [
-    { id: 'WM-05', state: 'RUNNING', ml_phase: 'WASHING' },
-    { id: 'WM-06', state: 'IDLE', ml_phase: null },
-    { id: 'WM-07', state: 'OCCUPIED', ml_phase: null },
-    { id: 'WM-08', state: 'RUNNING', ml_phase: 'RINSE' },
-    { id: 'WM-09', state: 'IDLE', ml_phase: null },
-    { id: 'WM-10', state: 'OCCUPIED', ml_phase: null },
-    { id: 'WM-11', state: 'RUNNING', ml_phase: 'SPINNING' },
+    { id: 'WM-05', state: 'RUNNING', ml_phase: 'WASHING', current: 195.5 },
+    { id: 'WM-06', state: 'IDLE', ml_phase: null, current: 0 },
+    { id: 'WM-07', state: 'OCCUPIED', ml_phase: null, current: 0 },
+    { id: 'WM-08', state: 'RUNNING', ml_phase: 'RINSE', current: 82.3 },
+    { id: 'WM-09', state: 'IDLE', ml_phase: null, current: 0 },
+    { id: 'WM-10', state: 'OCCUPIED', ml_phase: null, current: 0 },
+    { id: 'WM-11', state: 'RUNNING', ml_phase: 'SPINNING', current: 156.7 },
   ];
 
   return mockMachines.map((machine, index) => ({
     id: `mock-${index + 5}`,
     data: {
       state: machine.state,
-      current: machine.state === 'RUNNING' ? 2.1 + Math.random() * 0.5 : 0,
+      current: machine.current,
       MachineID: machine.id,
       ml_phase: machine.ml_phase,
       timestamp: new Date().toISOString(),
-      cycle_number: Math.floor(Math.random() * 20) + 1
+      cycle_number: Math.floor(Math.random() * 20) + 1,
+      door_opened: false,
+      ml_confidence: machine.ml_phase ? 0.7 + Math.random() * 0.2 : undefined
     },
     created_at: new Date().toISOString()
   }));

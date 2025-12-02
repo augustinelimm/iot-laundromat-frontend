@@ -71,27 +71,27 @@ const Map = ({ onMachineClick }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-7xl mx-auto px-8">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-semibold text-gray-900 mb-2">Laundromat Layout</h1>
-          <p className="text-gray-600 text-lg">Real-time view of machine locations and status</p>
-          {loading && <p className="text-sm text-gray-500 mt-2">Updating status...</p>}
+          <h1 className="text-3xl font-semibold text-gray-900 dark:text-white mb-2">Laundromat Layout</h1>
+          <p className="text-gray-600 dark:text-gray-400 text-lg">Real-time view of machine locations and status</p>
+          {loading && <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Updating status...</p>}
         </div>
 
           {/* Legend */}
           <div className="flex justify-center gap-6 mb-8">
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 bg-[#9bc14b] rounded"></div>
-              <span className="text-sm text-gray-700">Available</span>
+              <span className="text-sm text-gray-700 dark:text-gray-300">Available</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 bg-[#4a7c8c] rounded"></div>
-              <span className="text-sm text-gray-700">In Use</span>
+              <span className="text-sm text-gray-700 dark:text-gray-300">In Use</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 bg-[#d4a017] rounded"></div>
-              <span className="text-sm text-gray-700">Occupied</span>
+              <span className="text-sm text-gray-700 dark:text-gray-300">Occupied</span>
             </div>
           </div>
 
@@ -99,7 +99,7 @@ const Map = ({ onMachineClick }) => {
           <div className="relative mx-auto max-w-full overflow-auto px-4 flex justify-center">
             <div className="relative" style={{ width: '800px', height: '650px', background: 'white' }}>
             {/* Outer border - black */}
-            <div style={{ position: 'absolute', left: '0', top: '0', width: '800px', height: '650px', border: '2px solid black' }}></div>
+            <div className="dark:bg-gray-800" style={{ position: 'absolute', left: '0', top: '0', width: '800px', height: '650px', border: '2px solid black' }}></div>
             
             {/* Vertical wall after column 1 */}
             <div style={{ position: 'absolute', left: '198px', top: '5px', width: '20px', height: '485px', background: '#9CA3AF' }}></div>

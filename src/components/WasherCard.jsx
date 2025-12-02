@@ -164,7 +164,7 @@ export const WasherCard = ({ washer, language = 'EN', onClick }) => {
 
   return (
     <div 
-      className="flex flex-col items-center py-8 cursor-pointer hover:bg-gray-50 rounded-lg transition-colors"
+      className="flex flex-col items-center py-8 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
       onClick={onClick}
     >
       {/* Washer Icon */}
@@ -179,7 +179,7 @@ export const WasherCard = ({ washer, language = 'EN', onClick }) => {
 
       {/* Status Information */}
       <div className="text-center mb-4">
-        <span className="font-bold">{displayStatus}</span>
+        <span className="font-bold text-gray-900 dark:text-white">{displayStatus}</span>
       </div>
     </div>
   );

@@ -1,9 +1,11 @@
 import { useReadings } from '../hooks/useReadings';
 import config from '../config/config';
 import ProgressBar from '../components/ProgressBar';
+import { useTheme } from '../context/ThemeContext';
 
 const WasherDetail = ({ machineId, onBack, language }) => {
   const { data: readingsData, loading, error } = useReadings(config.pollingInterval);
+  const { isBusinessMode } = useTheme();
 
   // Find the specific machine data
   const machineData = readingsData?.data?.find(
@@ -12,6 +14,7 @@ const WasherDetail = ({ machineId, onBack, language }) => {
 
   const state = machineData?.data?.state || 'IDLE';
   const currentPhase = machineData?.data?.ml_phase || null;
+  const powerConsumption = machineData?.data?.current || 0;
   const isAvailable = state === 'IDLE';
   const isOccupied = state === 'OCCUPIED';
   const isInUse = state === 'RUNNING';
@@ -91,7 +94,7 @@ const WasherDetail = ({ machineId, onBack, language }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center py-12">
+      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center py-12">
         <div className="max-w-7xl w-full mx-auto px-8">
           <div className="p-12 text-center">
             <div className="inline-block mb-6">
@@ -107,7 +110,7 @@ const WasherDetail = ({ machineId, onBack, language }) => {
                 </g>
               </svg>
             </div>
-            <p className="text-gray-700 text-lg">Loading washer details...</p>
+            <p className="text-gray-700 dark:text-gray-300 text-lg">Loading washer details...</p>
           </div>
         </div>
       </div>
@@ -116,19 +119,19 @@ const WasherDetail = ({ machineId, onBack, language }) => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-red-600">Error loading machine data</div>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-red-600 dark:text-red-400">Error loading machine data</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Back button */}
         <button
           onClick={onBack}
-          className="mb-6 flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+          className="mb-6 flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
         >
           <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
             <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"/>
@@ -137,10 +140,10 @@ const WasherDetail = ({ machineId, onBack, language }) => {
         </button>
 
         {/* Machine Details Card */}
-        <div className="bg-white rounded-2xl shadow-lg p-8">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">{machineId}</h1>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{machineId}</h1>
           </div>
 
           {/* Large Washing Machine Visualization */}
@@ -201,20 +204,20 @@ const WasherDetail = ({ machineId, onBack, language }) => {
 
           {/* Progress Bar - Show when machine is running */}
           {isInUse && currentPhase && (
-            <div className="mb-8 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-6">
+            <div className="mb-8 bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl p-6">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                   {language === 'ZH' ? '进度' : 'Progress'}
                 </h3>
                 <div className="text-right">
-                  <p className="text-2xl font-bold text-blue-600">{timeRemaining}</p>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{timeRemaining}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
                     {language === 'ZH' ? '分钟剩余' : 'mins remaining'}
                   </p>
                 </div>
               </div>
               <ProgressBar value={progress} color="#4a7c8c" />
-              <div className="flex justify-between mt-2 text-sm text-gray-600">
+              <div className="flex justify-between mt-2 text-sm text-gray-600 dark:text-gray-400">
                 <span>{language === 'ZH' ? '已用时间' : 'Elapsed'}: {formatTime(Math.ceil((progress / 100) * totalTime))}</span>
                 <span>{language === 'ZH' ? '总时间' : 'Total'}: {formatTime(totalTime)}</span>
               </div>
@@ -223,8 +226,8 @@ const WasherDetail = ({ machineId, onBack, language }) => {
 
           {/* Phase Timeline - Only show when machine is running */}
           {isInUse && currentPhase && (
-            <div className="mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">
+            <div className="mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 text-center">
                 {language === 'ZH' ? '洗衣阶段' : 'Wash Cycle Phase'}
               </h3>
               <div className="relative flex items-center justify-between max-w-2xl mx-auto">
@@ -294,13 +297,13 @@ const WasherDetail = ({ machineId, onBack, language }) => {
 
           {/* Status Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-gray-50 rounded-lg p-6">
-              <h3 className="text-sm font-semibold text-gray-500 mb-2">Machine ID</h3>
-              <p className="text-2xl font-bold text-gray-900">{machineId}</p>
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+              <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2">Machine ID</h3>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{machineId}</p>
             </div>
             
-            <div className="bg-gray-50 rounded-lg p-6">
-              <h3 className="text-sm font-semibold text-gray-500 mb-2">Current Status</h3>
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+              <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2">Current Status</h3>
               <p className="text-2xl font-bold" style={{ color: getStatusColor() }}>
                 {getStatusText()}
               </p>
@@ -309,16 +312,75 @@ const WasherDetail = ({ machineId, onBack, language }) => {
 
           {/* Additional Info based on state */}
           {isInUse && (
-            <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-blue-900 mb-2">
-                {language === 'ZH' ? '洗衣中' : 'Washing in Progress'}
-              </h3>
-              <p className="text-blue-700">
-                {language === 'ZH' 
-                  ? '此洗衣机正在运行中，请勿打开。' 
-                  : 'This machine is currently in use. Please do not open.'}
-              </p>
-            </div>
+            <>
+              <div className="mt-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-300 mb-2">
+                  {language === 'ZH' ? '洗衣中' : 'Washing in Progress'}
+                </h3>
+                <p className="text-blue-700 dark:text-blue-400">
+                  {language === 'ZH' 
+                    ? '此洗衣机正在运行中，请勿打开。' 
+                    : 'This machine is currently in use. Please do not open.'}
+                </p>
+              </div>
+
+              {/* Power Consumption - Only show in Business Mode */}
+              {isBusinessMode && (
+                <div className="mt-4 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-lg font-semibold text-purple-900 dark:text-purple-300 mb-1">
+                        {language === 'ZH' ? '当前功耗' : 'Current Power Consumption'}
+                      </h3>
+                      <p className="text-sm text-purple-600 dark:text-purple-400">
+                        {language === 'ZH' ? '实时电力使用' : 'Real-time power usage'}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">
+                        {powerConsumption.toFixed(2)}
+                      </p>
+                      <p className="text-sm text-purple-600 dark:text-purple-400 font-medium">
+                        {language === 'ZH' ? '瓦特' : 'Watts'}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {/* Power meter visualization */}
+                  <div className="mt-4">
+                    <div className="flex items-center gap-3">
+                      <div className="flex-1">
+                        <div className="h-3 bg-purple-200 dark:bg-purple-800 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full transition-all duration-500"
+                            style={{ width: `${Math.min((powerConsumption / 250) * 100, 100)}%` }}
+                          />
+                        </div>
+                      </div>
+                      <span className="text-xs text-purple-600 dark:text-purple-400 font-medium">
+                        {Math.round((powerConsumption / 250) * 100)}%
+                      </span>
+                    </div>
+                    <div className="flex justify-between mt-1 text-xs text-purple-600 dark:text-purple-400">
+                      <span>0W</span>
+                      <span>250W</span>
+                    </div>
+                  </div>
+
+                  {/* Energy efficiency indicator */}
+                  <div className="mt-4 pt-4 border-t border-purple-200 dark:border-purple-800">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-purple-700 dark:text-purple-300">
+                        {language === 'ZH' ? '能效评级' : 'Energy Efficiency'}
+                      </span>
+                      <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full font-medium">
+                        A+
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </>
           )}
 
           {isOccupied && (

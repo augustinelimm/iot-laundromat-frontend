@@ -55,7 +55,7 @@ const Home = ({ language = 'EN', onMachineClick }) => {
 
   if (loading && !displayData) {
     return (
-      <main className="min-h-screen bg-white flex items-center justify-center py-12">
+      <main className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center py-12">
         <div className="max-w-7xl w-full mx-auto px-8">
           <div className="p-12 text-center">
             <div className="inline-block mb-6">
@@ -71,7 +71,7 @@ const Home = ({ language = 'EN', onMachineClick }) => {
                 </g>
               </svg>
             </div>
-            <p className="text-gray-700 text-lg">Loading washer status...</p>
+            <p className="text-gray-700 dark:text-gray-300 text-lg">Loading washer status...</p>
           </div>
         </div>
       </main>
@@ -79,15 +79,15 @@ const Home = ({ language = 'EN', onMachineClick }) => {
   }
 
   return (
-    <main id="main" className="min-h-screen bg-white py-12">
+    <main id="main" className="min-h-screen bg-white dark:bg-gray-900 py-12">
       <div className="max-w-7xl w-full mx-auto px-8">
         <div className="py-8 px-8 text-center">
-          <h1 className="text-3xl font-semibold text-gray-900 mb-2">Washing Machine Monitor</h1>
-          <p className="text-gray-600 text-lg">Real-time monitoring of your washing machines</p>
+          <h1 className="text-3xl font-semibold text-gray-900 dark:text-white mb-2">Washing Machine Monitor</h1>
+          <p className="text-gray-600 dark:text-gray-400 text-lg">Real-time monitoring of your washing machines</p>
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 mx-8 mt-6 rounded-lg">
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-6 py-4 mx-8 mt-6 rounded-lg">
             <p className="text-lg">{error}</p>
             <button onClick={handleRefresh} className="mt-2 underline text-base">Try again</button>
           </div>
@@ -143,7 +143,7 @@ const Home = ({ language = 'EN', onMachineClick }) => {
               </div>
             ) : (
               <div className="py-12">
-                <p className="text-gray-500 text-center text-lg">No machine data available</p>
+                <p className="text-gray-500 dark:text-gray-400 text-center text-lg">No machine data available</p>
               </div>
             )}
         </div>
