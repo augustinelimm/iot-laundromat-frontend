@@ -394,7 +394,7 @@ const WasherDetail = ({ machineId, onBack, language }) => {
                   </div>
                   <div className="flex justify-between text-xs text-orange-600 dark:text-orange-400">
                     <span>0</span>
-                    <span>30,000 {language === 'ZH' ? '次' : 'cycles'}</span>
+                    <span>{language === 'ZH' ? '维护' : 'Maintenance'}</span>
                   </div>
                 </div>
 
@@ -430,8 +430,8 @@ const WasherDetail = ({ machineId, onBack, language }) => {
                   )}
                   <p className="text-xs text-orange-600 dark:text-orange-400 mt-2">
                     {language === 'ZH' 
-                      ? `距离维护还有 ${(maintenanceThreshold - totalCyclesUsed).toLocaleString()} 次`
-                      : `${(maintenanceThreshold - totalCyclesUsed).toLocaleString()} cycles until maintenance`}
+                      ? `约 ${(maintenanceThreshold - totalCyclesUsed).toLocaleString()} 次直到维护`
+                      : `Est. ${(maintenanceThreshold - totalCyclesUsed).toLocaleString()} cycles until maintenance`}
                   </p>
                 </div>
               </div>
