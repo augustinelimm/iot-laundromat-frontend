@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 const getMockData = () => {
   const mockMachines = [
     { id: 'WM-05', state: 'RUNNING', ml_phase: 'WASHING', current: 195.5, cycle_number: 87 },
-    { id: 'WM-06', state: 'IDLE', ml_phase: null, current: 0, cycle_number: 142 },
-    { id: 'WM-07', state: 'OCCUPIED', ml_phase: null, current: 0, cycle_number: 203 },
-    { id: 'WM-08', state: 'RUNNING', ml_phase: 'RINSE', current: 82.3, cycle_number: 153 },
+    { id: 'WM-06', state: 'IDLE', ml_phase: null, current: 0, cycle_number: 45 },
+    { id: 'WM-07', state: 'OCCUPIED', ml_phase: null, current: 0, cycle_number: 37 },
+    { id: 'WM-08', state: 'RUNNING', ml_phase: 'RINSE', current: 82.3, cycle_number: 42 },
     { id: 'WM-09', state: 'IDLE', ml_phase: null, current: 0, cycle_number: 98 },
     { id: 'WM-10', state: 'OCCUPIED', ml_phase: null, current: 0, cycle_number: 231 },
     { id: 'WM-11', state: 'RUNNING', ml_phase: 'SPINNING', current: 156.7, cycle_number: 178 },
